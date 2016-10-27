@@ -148,18 +148,12 @@ EXPLAIN LATER
 ###version (readonly)
 
 ```javascript
-
 console.log('Currently running version ', + phame.version + ' of phame.js');
 
 ```
 
 
-
 Read only property holding the library version number
-
-
-
-
 
 
 
@@ -173,27 +167,27 @@ See xxx for more information about how to obtain a device object.
 
 
 
-## Methods
+## Methods and Properties
 
 
 
-## Session Handling
+### Session Handling
 
 
 
-### getState() : string
+#### getState() : string
 
 Will return a string indicating the device’s current `device state` (`'present'`, `'away'` or `'gone'`). See XXX for more information about device states.
 
 
 
-### getAwayTime() : int
+#### getAwayTime() : int
 
 The number of seconds the device has been in the `'away'` state. If the device isn’t currently away, this method will return `0`.
 
 
 
-### getControllerName() : string
+#### getControllerName() : string
 
 The name of the controller that is currently set to run on the controller device. The name is the key that was used when defining the controller in the controllers entry of the `options` object passed to `start()` or `startAndShowModal()` when initiating the session. (Show code example)
 
@@ -203,7 +197,7 @@ console.log('Current controller: ', phame.getControllerName()); //Will print 'Cu
 ```
 
 
-### disconnect() : void
+#### disconnect() : void
 
 Will disconnect the device (the device’s state will change to `'gone'`).
 
@@ -211,8 +205,9 @@ Will disconnect the device (the device’s state will change to `'gone'`).
 
 Example
 
+```javascript
 phame.device.disconnect(); //Will disconnect the primary device
-
+```
 
 
 ### sessionIndex

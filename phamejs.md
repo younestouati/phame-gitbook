@@ -1,13 +1,10 @@
 #phame
 
-phame is a global namespace from which the phame api methods and properties are accessed.
+`phame` is a global namespace from which the phame api methods and properties are accessed.
 
 
 
 ## Methods
-
-
-
 
 
 ### Session Handling
@@ -18,7 +15,7 @@ Only one session at a time // allows controller devices to connect // identified
 
 ### start(options) : promise
 
-Starts a new phame session. Returns a promise that will resolve with the session id once the session has been created. Use the phame native apps or the phame simulator to connect controller devices to the session, using the session id.
+Starts a new phame session. Returns a `promise` that will resolve with the `sessionId` once the session has been created. Use the phame native apps or the [phame simulator](https://www.phame.io/simulator) to connect controller devices to the session, using the `sessionId`.
 
 
 
@@ -28,11 +25,11 @@ If there is an ongoing session on the current domain, from a previous page load,
 
 ### startAndShowModal(options) : promise
 
-Like start() it start a new phame session. Will launch the phame connection modal ui once the session has been created. The UI explains to the user how to connect controller devices. The returned promise will resolve only when enough devices have connected (as defined by the the ‘minDevices' property of the options object, which defaults to 1).
+Like `start()` it starts a new phame session. Will launch the phame connection modal ui once the session has been created. The UI explains to the user how to connect controller devices. The returned `promise` will resolve only when enough devices have connected (as defined by the the `minDevices` property of the options object, which defaults to 1).
 
 
 
-Like start() the startAndShowModal method supports session reuse and thus provides auto reconnection.
+Like `start()` the `startAndShowModal()` method supports session reuse and thus provides auto reconnection.
 
 
 
@@ -44,7 +41,7 @@ Ends the current phame session. All connected controller devices will be disconn
 
 ### restore(options) : promise
 
-Restores the ongoing session on the current domain, from a previous page load, if any. In other words, if there is an ongoing session, this method works exactly like the start() method. If there is no ongoing session, this method does nothing. Returns a promise that will behave like the start() methods return promise, in case there is an ongoing session. If there is no ongoing session the promise will be rejected with value ’no-session’.
+Restores the ongoing session on the current domain, from a previous page load, if any. In other words, if there is an ongoing session, this method works exactly like the `start()` method. If there is no ongoing session, this method does nothing. Returns a `promise` that will behave like the `start()` method's return `promise`, in case there is an ongoing session. If there is no ongoing session the `promise` will be rejected with `string` value `"no-session"`.
 
 
 
@@ -54,13 +51,13 @@ Restores the ongoing session on the current domain, from a previous page load, i
 
 ### isSessionActive() : boolean
 
-Return whether or not a phame session is active. Note, that an ongoing session from a previous page load is not active until start() or restore() has been called.
+Returns whether or not a phame session is active. Note, that an ongoing session from a previous page load is not active until `start()` or `restore()` has been called.
 
 
 
 ### getSessionId()
 
-If there is an active session this method returns the session id (which is used to connect controller devices to the session). If there is currently no active session, null is returned.
+If there is an active session this method returns the `sessionId` (which is used to connect controller devices to the session). If there is currently no active session, `null` is returned.
 
 
 
@@ -74,27 +71,27 @@ If there is an active session this method returns the session id (which is used 
 
 ### device
 
-A reference to the primary device. Allows you to interact with the primary controller device conveniently by phame.device.on(), phame.device.off() etc. Particularly convenient when there is only a single controller device connected. When multiple controllers devices are connected, you can still access the primary device this way, or you can chose to ignore the primary device concept all together and use other means (i.e. the .device() and devices() methods) to target the controller devices you wish to target. When multiple devices are connected, the primary device will be the controller device that joined the session first, unless another has been explicitly set as primary using the setPrimaryDevice() method.
+A reference to the primary device. Allows you to interact with the primary controller device conveniently by `phame.device.on()`, `phame.device.off()` etc. Particularly convenient when there is only a single controller device connected. When multiple controllers devices are connected, you can still access the primary device this way, or you can chose to ignore the primary device concept all together and use other means (i.e. the `.device()` and `devices()` methods) to target the controller devices you wish to target. When multiple devices are connected, the primary device will be the controller device that joined the session first, unless another has been explicitly set as primary using the `setPrimaryDevice()` method.
 
 
 
 ### device(selector) : device
 
-Returns the first of the controller devices that matches the given selector (See XXX for an explanation of what a selector is). The devices are sorted by the time at which they joined the session, meaning that if multiple devices match the selector, the one that joined the session first will be returned.  
+Returns the first of the controller devices that match the given `selector` (See XXX for an explanation of what a selector is). The devices are sorted by the time at which they joined the session, meaning that if multiple devices match the selector, the one that joined the session first will be returned.  
 
 
 
 ### devices(selector) : deviceGroup
 
-Returns the deviceGroup consisting of all the controller devices that match the given selector (see XXX for an explanation of what a selector is)
+Returns the `deviceGroup` consisting of all the controller devices that match the given selector (see XXX for an explanation of what a selector is)
 
 
 
 ### setPrimaryDevice(device)
 
-Sets the give device as the primary device. This means that device can be accessed directly using the phame.device property: e.g. phame.device.on(…). LINK
+Sets the give device as the primary device. This means that device can be accessed directly using the `phame.device` property: e.g. `phame.device.on(…)`. LINK
 
-By default the primary device will always be the one - amongst those still part of the session (whether is present or away) that joined first. Use  setPrimaryDevice() to override this default.
+By default the primary device will always be the one - amongst those still part of the session (whether they are `present` or `away`) that joined first. Use  `setPrimaryDevice()` to override this default.
 
 
 
@@ -106,33 +103,33 @@ Will trigger some event pertaining to the session // Don’t confuse with the on
 
 ### on(eventName, eventHandler)
 
-Registers an event handler for the given event name from the phame object. The phame object may trigger the following events:
+Registers an event handler for the given event name from the `phame` object. The `phame` object may trigger the following events:
 
-* phame-session-started
+* `phame-session-started`
 
-* phame-session-ended
+* `phame-session-ended`
 
-* phame-modal-opened
+* `phame-modal-opened`
 
-* phame-modal-closed
+* `phame-modal-closed`
 
-* phame-device-connected
+* `phame-device-connected`
 
-* phame-device-disconnected (ADD THIS ONE??)
+* `phame-device-disconnected` (ADD THIS ONE??)
 
-* phame-device-connection-restored (RENAME IN CODE!)
+* `phame-device-connection-restored` (RENAME IN CODE!)
 
-* phame-device-connection-denied
+* `phame-device-connection-denied`
 
-* phame-not-enough-devices
+* `phame-not-enough-devices`
 
-* phame-primary-device-set
+* `phame-primary-device-set`
 
 
 
 ### off
 
-Unregisters the given event handler for the given event name. Note, that the given event handler must be a reference to the same function that was passed to the .on() method when registering the handler.
+Unregisters the given event handler for the given event name. Note, that the given event handler must be a reference to the same function that was passed to the `.on()` method when registering the handler.
 
 
 
@@ -152,7 +149,7 @@ EXPLAIN LATER
 
 ```javascript
 
-console.log(‘Currently running version ‘, + phame.version + ‘ of phame.js’);
+console.log('Currently running version ', + phame.version + ' of phame.js');
 
 ```
 
@@ -168,7 +165,7 @@ Read only property holding the library version number
 
 # device 
 
-The device object represents a single controller device. Use this object to listen for events from this controller device or to send instructions/queries to it through remote procedure calls. If you wish to interact with more than one device at a time, see the documentation for deviceGroup (link)
+The `device` object represents a single controller device. Use this object to listen for events from this controller device or to send instructions/queries to it through remote procedure calls. If you wish to interact with more than one device at a time, see the documentation for `deviceGroup` (link)
 
 
 
@@ -186,25 +183,29 @@ See xxx for more information about how to obtain a device object.
 
 ### getState() : string
 
-Will return a string indicating the device’s current device state (‘present’, ‘away’ or ‘gone’). See XXX for more information about device states.
+Will return a string indicating the device’s current `device state` (`'present'`, `'away'` or `'gone'`). See XXX for more information about device states.
 
 
 
 ### getAwayTime() : int
 
-The number of seconds the device has been in the away state. If the device isn’t currently away, this method will return 0.
+The number of seconds the device has been in the `'away'` state. If the device isn’t currently away, this method will return `0`.
 
 
 
 ### getControllerName() : string
 
-The name of the controller that is currently set to run on the controller device. The name is the key that was used when defining the controller in the controllers entry of the options object passed to `start()` or `startAndShowModal()` when initiating the session. (Show code example)
+The name of the controller that is currently set to run on the controller device. The name is the key that was used when defining the controller in the controllers entry of the `options` object passed to `start()` or `startAndShowModal()` when initiating the session. (Show code example)
 
+```javascript
+phame.device.setController('my-controller'); 
+console.log('Current controller: ', phame.getControllerName()); //Will print 'Current controller: my-controller'
+```
 
 
 ### disconnect() : void
 
-Will disconnect the device (the device’s state will change to `gone`).
+Will disconnect the device (the device’s state will change to `'gone'`).
 
 
 

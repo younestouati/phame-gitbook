@@ -2,5 +2,5 @@
 
 * [My Awesome API](README.md)
 * [Defining Methods](methods.md)
-* phame.js
+* [phame.js](phamejs.md)
 

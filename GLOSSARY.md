@@ -15,7 +15,7 @@ A controller device is either an iPhone, and Android Smartphone or (during devel
 Note that for controller devices are often referred to as simply devices, for short in documentation and in the names of the API methods. Whenever the term devices is used, if ALWAYS refers to the controller devices, never to the main device (which seldom needs to referred to explicitly. And when needed the term main device will be used)
 
 
-## Primary (Controller) Device
+## Primary Device
 The primary controller device (typically referred to as primary device for short) is the controller that currently is considered the ‘primary’ controller. This controller can be targeted from the main device in a particularly easy manner using the Phame API (through the phame.device property). In single controller device scenarios this gives you a convenient way of targeting the unambiguous controller device from your code running on the main device. In multi controller device scenarios you (the application developer) can chose to ignore the notion of a primary controller device altogether, or to assign special meaning/capabilities to this primary controller as appropriate in the context of the application.
 
 

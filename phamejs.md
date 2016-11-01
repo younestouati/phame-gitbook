@@ -549,42 +549,38 @@ phame.devices({team: ‘blue’}).and({team: ‘red’}).live(’some-event’, 
 
 Removes event handler previously attached using live(). Note that the current selector must match the selector used previously when applying live(). For example, the following line attaches a live handler to the deviceGroup consisting of devices with sessionIndices 0 and 1:
 
-phame.devices(0).and(1).live(“some-event”, () => console.log(‘Foor'))
-
-
+```javascript
+phame.devices(0).and(1).live(“some-event”, () => console.log('Foo'))
+```
 
 Trying to remove this handler again, using a different selector (even if the deviceGroups consist of the same devices), will not have any effect:
 
+```javascript
 phame.devices(1).and(0).die(“some-event”); //Will not remove the event handler! Selector is different!
-
+```
 
 
 The event handler can however be removed by using the exact same selector as when applying live():
 
+```javascript
 phame.devices(0).and(1).die(“some-event”); //TODO: FIGURE OUT IF HANDLER IS NEEDED?
+```
 
 
 
 Also, when using a predicate function as (part of) the selector, a reference to the exact same function must be passed in when calling die, as was used when calling live() for it to work:
 
 
-
+```javascript
 //WRONG - won’t work.
-
 phame.devices((queryData, sessionIndex) => sessionIndex > 0).live(“some-event”, someHandler);
-
 phame.devices((queryData, sessionIndex) => sessionIndex > 0).die(“some-event”); //Selector is a different function (although function body is identical)
 
-
-
 //Right - will work
-
 const allButFirst = (queryData, sessionIndex) => sessionIndex > 2;
-
 phame.devices(allButFirst).live(“some-event”, someHandler);
-
 phame.devices(allButFirst).die(“some-event”); //Will remove the event handler, because selector is a reference to the same function as was used with live()
-
+```
 
 
 
@@ -699,14 +695,11 @@ phame.devices(0); //Returns the deviceGroup for the group consisting of only the
 
 Currently only a single string selector is supported; ‘all’ which matches all of the connected controller devices (both present and away link).
 
+```javascript
+phame.device('all'); //Will return the first device that matches the selector. Since every device matches the ‘all selector’, first device - that is the one with the lowest session index - is returned
 
-
-Examples:
-
-phame.device(‘all’); //Will return the first device that matches the selector. Since every device matches the ‘all selector’, first device - that is the one with the lowest session index - is returned
-
-phame.devices(‘all’); //Will return a deviceGroup consisting of all the controller devices in the session
-
+phame.devices('all'); //Will return a deviceGroup consisting of all the controller devices in the session
+```
 
 
 ##Object (key/value pairs)

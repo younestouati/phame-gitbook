@@ -8,28 +8,38 @@
 
 
 ### Session Handling
+Before any controller device can connect, the main device must start a `phame session`. Each session has an associated sessionId, which is used when connecting a controller device. This section describes the methods `start()`, `startAndShowModal()`, `end()`, `restore()`, `isSessionActive()` and `getSessionId()` which is the complete set of methods dealing with session handling. 
 
-Only one session at a time // allows controller devices to connect // identified by a session id // auto reconnection is supported
+Phame has built in support for restoring sessions (through the `start()` and `restore()` methods), which is particularly convinient during development, where you may wish to refresh your app frequently. The session restoration feature allows you to continue a session across page refreshes.
+
 
 
 
 ### start(options) : promise
 
-Starts a new phame session. Returns a `promise` that will resolve with the `sessionId` once the session has been created. Use the phame native apps or the [phame simulator](https://www.phame.io/simulator) to connect controller devices to the session, using the `sessionId`.
+Starts a new phame session. Returns a `promise` that will resolve with the `sessionId` once the session has been created. Use the phame native apps or the [phame simulator](https://www.phame.io/simulator) to connect controller devices, using the `sessionId`.
+
+```javascript
+phame.start()
+  .then(sessionId => console.log("Phame Session started. Join using this id: ", sessionId));
+```
+
+If there is an ongoing session on the current domain, from a previous page load in the same browser tab, the method will continue this session rather than starting a new one. This way all controller devices that have joined this session will remain connected (link to reconnection for more details).
 
 
-
-If there is an ongoing session on the current domain, from a previous page load, the method will continue this session rather than starting a new one. This way all controller devices that have joined this session will remain connected (link to reconnection for more details).
-
-
+//TODO: DOCUMENT THE OPTIONS!
 
 ### startAndShowModal(options) : promise
 
-Like `start()` it starts a new phame session. Will launch the phame connection modal ui once the session has been created. The UI explains to the user how to connect controller devices. The returned `promise` will resolve only when enough devices have connected (as defined by the the `minDevices` property of the options object, which defaults to 1).
+Like the `start()` method `startAndShowModal()` starts a new phame session. It will also launch the phame connection modal UI once the session has been created. The UI explains to the user how to connect controller devices. The returned `promise` will resolve only when enough devices have connected (as defined by the the `minDevices` property of the options object, which defaults to 1).
+
+```javascript
+phame.startAndShowModal()
+  .then(() => console.log("Phame Session started, and a controller device has joined. We are ready to roll!"));
+```
 
 
-
-Like `start()` the `startAndShowModal()` method supports session reuse and thus provides auto reconnection.
+Like `start()` the `startAndShowModal()` method supports session restoration and thus provides auto reconnection.
 
 
 
@@ -37,13 +47,20 @@ Like `start()` the `startAndShowModal()` method supports session reuse and thus 
 
 Ends the current phame session. All connected controller devices will be disconnected.
 
+```javascript
+phame.end(); //The session has now ended.
+```
 
 
 ### restore(options) : promise
 
-Restores the ongoing session on the current domain, from a previous page load, if any. In other words, if there is an ongoing session, this method works exactly like the `start()` method. If there is no ongoing session, this method does nothing. Returns a `promise` that will behave like the `start()` method's return `promise`, in case there is an ongoing session. If there is no ongoing session the `promise` will be rejected with `string` value `"no-session"`.
+Restores the ongoing session on the current domain, from a previous page load in the current browser tab, if any. In other words, if there is an ongoing session, this method works exactly like the `start()` method. If there is no ongoing session, this method does nothing. Returns a `promise` that will behave like the `start()` method's return `promise`, in case there is an ongoing session. If there is no ongoing session the `promise` will be rejected with `string` value `"no-session"`.
 
-
+```javascript
+phame.restore()
+  .then(sessionId => console.log("Session with id " + sessionId + " restored")
+  .catch(() => console.log("No session to restore - so we will do nothing"));
+```
 
 //TODO: Write something about how it is convenient to call it at all times, and definitely during development 
 
@@ -53,25 +70,39 @@ Restores the ongoing session on the current domain, from a previous page load, i
 
 Returns whether or not a phame session is active. Note, that an ongoing session from a previous page load is not active until `start()` or `restore()` has been called.
 
+```javascript
+if (isSessionActive()) {
+  console.log("There is a phame session going on");
+} else {
+  console.log("No phame session going on.")
+}
+```
 
 
 ### getSessionId()
 
-If there is an active session this method returns the `sessionId` (which is used to connect controller devices to the session). If there is currently no active session, `null` is returned.
+If there is an active session this method returns the `sessionId` (which is used to connect controller devices to the session). If there is no active session, `null` is returned.
 
+```javascript
+console.log("The id of the current session is: ", phame.getSessionId());
+```
 
 
 
 
 ## Device Handling
 
-//Some blah blah
+NOGET. This section describes the properties and methods you will use to interact with the connected controller devices. It will introduce the `device` property, used to target the `primary device`, as well as the `device()` and `devices()` methods used to target a single or a group of controller devices based on a given `selector`. Finally, the `setPrimaryDevice` method is presented.
+
+//MAYBE A REFERENCE TO THE device state description
+
+//CAVEAT: DEVICES ARE ONLY CONTROLLER DEVICES!!
 
 
 
 ### device
 
-A reference to the primary device. Allows you to interact with the primary controller device conveniently by `phame.device.on()`, `phame.device.off()` etc. Particularly convenient when there is only a single controller device connected. When multiple controllers devices are connected, you can still access the primary device this way, or you can chose to ignore the primary device concept all together and use other means (i.e. the `.device()` and `devices()` methods) to target the controller devices you wish to target. When multiple devices are connected, the primary device will be the controller device that joined the session first, unless another has been explicitly set as primary using the `setPrimaryDevice()` method.
+A reference to the `primary device`. Allows you to interact with the `primary device` conveniently by `phame.device.on()`, `phame.device.off()` etc. Particularly convenient when there is only a single controller device connected. When multiple controllers devices are connected, you can still access the primary device this way, or you can chose to ignore the primary device concept all together and use other means (i.e. the `.device()` and `devices()` methods) to target the controller devices you wish to target. When multiple devices are connected, the primary device will be the controller device that joined the session first, unless you have explicitly set another as primary device using the `setPrimaryDevice()` method.
 
 
 
@@ -79,20 +110,37 @@ A reference to the primary device. Allows you to interact with the primary contr
 
 Returns the first of the controller devices that match the given `selector` (See XXX for an explanation of what a selector is). The devices are sorted by the time at which they joined the session, meaning that if multiple devices match the selector, the one that joined the session first will be returned.  
 
+```javascript
+const deviceWithSessionIndex3 = phame.device(3);
+if (deviceWithSessionIndex3 === null) {
+  console.log("No device with session index 3");
+} else {
+  console.log("There is a device with session index 3");
+}
+```
 
 
 ### devices(selector) : deviceGroup
 
-Returns the `deviceGroup` consisting of all the controller devices that match the given selector (see XXX for an explanation of what a selector is)
+Returns the `deviceGroup` consisting of all the controller devices that match the given selector (see XXX for an explanation of what a selector is). Also link to documentation for deviceGroup
 
+```javascript
+console.log("Total number of controller devices: ", phame.devices("all").size());
+```
 
 
 ### setPrimaryDevice(device)
 
-Sets the give device as the primary device. This means that device can be accessed directly using the `phame.device` property: e.g. `phame.device.on(…)`. LINK
+Sets the given device as the primary device. This means that the device can be accessed directly using the `phame.device` property: e.g. `phame.device.on(…)`. LINK
 
 By default the primary device will always be the one - amongst those still part of the session (whether they are `present` or `away`) that joined first. Use  `setPrimaryDevice()` to override this default.
 
+```javascript
+//Make device with session index 2 the primary controller device
+if (phame.device(2)) {
+  phame.setPrimaryDevice(phame.device(2));
+}	
+```
 
 
 ## Event subscription
@@ -103,7 +151,7 @@ Will trigger some event pertaining to the session // Don’t confuse with the on
 
 ### on(eventName, eventHandler)
 
-Registers an event handler for the given event name from the `phame` object. The `phame` object may trigger the following events:
+Registers an event handler for the given event name from the `phame` object. The `phame` object triggers the following events:
 
 * `phame-session-started`
 
@@ -117,7 +165,7 @@ Registers an event handler for the given event name from the `phame` object. The
 
 * `phame-device-disconnected` (ADD THIS ONE??)
 
-* `phame-device-connection-restored` (RENAME IN CODE!)
+* `phame-connection-restored` (RENAME IN CODE!)
 
 * `phame-device-connection-denied`
 
@@ -126,22 +174,22 @@ Registers an event handler for the given event name from the `phame` object. The
 * `phame-primary-device-set`
 
 
+```javascript
+function connectionHandler(device) {
+  console.log("A new new device with sessionIndex " device.sessionIndex + " has just connected"));	
+}
 
-### off
+phame.on('phame-device-connected', connectionHandler);	
+```
+
+
+### off(eventName, eventHandler)
 
 Unregisters the given event handler for the given event name. Note, that the given event handler must be a reference to the same function that was passed to the `.on()` method when registering the handler.
 
-
-
-## Computer Vision (experimental)
-
-//Experimental stuff // Some really cool and novel use cases // Harder to get to work properly
-
-
-
-### setVisionTrackingFrame(domElement)
-
-EXPLAIN LATER
+```javascript
+phame.off('phame-device-connected', connectionHandler);	
+```
 
 
 
@@ -159,8 +207,7 @@ Read only property holding the library version number
 
 # device 
 
-The `device` object represents a single controller device. Use this object to listen for events from this controller device or to send instructions/queries to it through remote procedure calls. If you wish to interact with more than one device at a time, see the documentation for `deviceGroup` (link)
-
+The `device` object represents a single controller device. Use this object to listen for events from this controller device or to send instructions/queries to it through remote procedure calls (link to guide). If you wish to interact with more than one device at a time, see the documentation for `deviceGroup` (link)
 
 
 See xxx for more information about how to obtain a device object.
@@ -179,12 +226,18 @@ See xxx for more information about how to obtain a device object.
 
 Will return a string indicating the device’s current `device state` (`'present'`, `'away'` or `'gone'`). See XXX for more information about device states.
 
+```javascript
+console.log("Current state: ", phame.device.getState()); 
+```
 
 
 #### getAwayTime() : int
 
 The number of seconds the device has been in the `'away'` state. If the device isn’t currently away, this method will return `0`.
 
+```javascript
+console.log("Device has been away for: ", phame.device.getAwayTime() + " seconds"); 
+```
 
 
 #### getControllerName() : string
@@ -206,7 +259,11 @@ Will disconnect the device (the device’s state will change to `'gone'`).
 Example
 
 ```javascript
-phame.device.disconnect(); //Will disconnect the primary device
+/* This will disconnect the primary device from the session (from now on 
+its device state will be 'gone'). 
+Another device will automatically be selected as the primary controller device 
+(and therefore be possible to reference by phame.device). */
+phame.device.disconnect(); 
 ```
 
 
@@ -232,15 +289,12 @@ Note that the controllers them themselves have no notion of what query data has 
 
 ### setQueryData(object)
 
-Merges the given object into the current query data object (Object.assign style).
+Merges the given object into the current query data object (`Object.assign` style).
 
-
-
-Example:
-
+```javascript
 phame.device.setQueryData({a: 1, b: 2}); //Query data is now {a: 1, b:2}
-
 phame.device.setQueryData({a: 3});	 //Query data is now {a: 3, b: 2}
+```
 
 
 
@@ -248,15 +302,11 @@ phame.device.setQueryData({a: 3});	 //Query data is now {a: 3, b: 2}
 
 Adds a property with the name key and the value value to the query data object, overwriting the property if it already exists.
 
-
-
-Example
-
+```javascript
 phame.device.setQueryData(a, 1); //Query data is now {a: 1}
-
 phame.device.setQueryData(b, 2); //Query data is now {a: 1, b: 2}
-
 phame.device.setQueryData(a, 3); //Query data is now {a: 3, b: 2}
+```
 
 
 
@@ -269,33 +319,24 @@ Returns a clone of the value of the key property of the query data object. If no
 
 
 Example
-
+```javascript
 phame.device.setQueryData({a: 1, b: 2}); 
-
 console.log(’The value of a: ‘, phame.device.getQueryData(‘a’)); //’The value of a: 1’
-
 console.log(’The query data: ‘, phame.device.getQueryData()); //’The query data: {a: 1, b: 2}'
-
-console.log(’The value of c: ‘, phame.device.getQueryData(‘c’)); //’The value of z: null'
-
+console.log(’The value of c: ‘, phame.device.getQueryData(‘c’)); //’The value of c: null'
+```
 
 
 ### RemoveQueryData(key)
 
 Removes the property key from the query data object. If no key is provided it removes all of the query data (resets if to an empty object {}). If the key property doesn’t exist, this method does nothing. //TODO: RETURN FALSE?
 
-
-
-Example
-
+```javascript
 phame.device.setQueryData({a: 1, b: 2, c: 3}); 
-
 phame.device.removeQueryData(‘x’); //Nothing happens, x property does not exist
-
 phame.device.removeQueryData(‘c’); //Query data is now {a: 1, b: 2}
-
 phame.device.removeQueryData(); // Query data is now {}
-
+```
 
 
 
@@ -310,12 +351,17 @@ phame.device.removeQueryData(); // Query data is now {}
 
 ### setController(controllerName) : promise
 
-Sets
+Sets (NOTE THAT IT MUST BE SET IN START OPTIONS FIRST!!)
 
-
+```javascript
+phame.device.setController('someOtherController', {initialProp: 42});
+```
 
 ### setProps() : promise
-
+TALK ABOUT HOW THIS IS THE RECOMMENDED WAY OF TRANSFERING STATE. LINK TO ARTICLE ABOUT IT.
+```javascript
+phame.device.setProps({counterValue: 3});
+```
 
 
 
@@ -324,13 +370,21 @@ Sets
 
 Pings the device. Returns a promise that resolves as soon as a reply has been received from the device. The promise resolves with an object with a ’time property’ holding the round trip time in milliseconds.
 
+```javascript
+phame.device.ping()
+  .then(response => console.log("Round trip time is: " + response.time + " milliseconds"))
+  .catch(() => console.log("Unable to ping device - device state may be away")); //TODO: READ REASON??
+```
+
 
 
 ### vibrate(vibrationPattern) : promise
 
 Will cause the controller device to vibrate according to the given vibration pattern. The vibration pattern matches that of the navigator.vibrate api (link). It may be a number (in which case it means the number of milliseconds the device should vibrate). It may also be an array of numbers, in which case...
 
-
+```javascript
+phame.device.vibrate([1000, 2000, 1000]); //Vibrate 1s, pause 2s, vibrate for 1s
+```
 
 <aside class=“warning”>
 
@@ -344,6 +398,11 @@ Gotcha: If phone is in silent mode, it may not be possible to make it vibrate.
 
 Retrieves an object describing the current state of the controller device, including the platform (iOS, Android or Simulator), current battery status and more. The method returns a promise that will resolve with device info object. EXAMPLE
 
+```javascript
+phame.device.getDeviceInfo()
+  .then(info => console.log("Some info about the device: ", info))
+  .catch(() => console.log("Unable to obtain device info"));
+```
 
 
 do
@@ -380,23 +439,6 @@ Returns a string representation of the device (DESCRIBE WHAT IT LOOKS LIKE)
 
 
 
-## Computer Vision (experimental)
-
-### toMainCoordinates
-
-### transformElement
-
-### getDistance
-
-### getPosition
-
-
-
-
-
-
-
-
 
 #deviceGroup
 
@@ -405,7 +447,7 @@ Returns a string representation of the device (DESCRIBE WHAT IT LOOKS LIKE)
 
 
 ##Iterating
-
+Note that for the most part you don't want to iterate. Just operate on the deviceGroup i self.
 
 
 ###map(callback)
@@ -444,12 +486,18 @@ Returns the number of devices in the deviceGroup
 
 Returns a new deviceGroup consisting of the devices in the current group plus the devices that match the given selector (link). Note that the current deviceGroup remains unaffected.
 
+```javascript
+phame.devices(0).and(1).vibrate(1000);
+```
 
 
 ###except(selector)
 
 Returns a new deviceGroup consisting of the devices in the current group except the devices that match the given selector (link). Note that the current deviceGroup remains unaffected.
 
+```javascript
+phame.devices('all').except(0).vibrate(1000);
+```
 
 
 ###solo(eventName, evenHandler)
@@ -464,41 +512,26 @@ Registers an event handler for all devices which match the current selector now 
 
 
 
-Examples:
-
+```javascript
 //This will register the event handler for all devices, including devices that will connect in the future
-
 phame.devices(‘all’).live(‘phame-touchstart’, (e) => console.log(’Touch start event fired for device with session index ‘ + e.device.sessionIndex));
+```
 
-
-
+```javascript
 //Assuming 3 devices are connected with session indices 0, 1, and 2:
-
 phame.device(0).setQueryData(“team”, “blue”);
-
 phame.device(1).setQueryData(“team”, “blue”);
-
 phame.device(2).setQueryData(“team”, “red”);
 
-
-
 //This will register an event handler for devices with session indices 0 and 1
-
 phame.devices({“team”: “blue”}).live(“phame-touchstart”, () => console.log(’Touch start fired by blue team member’));
 
-
-
 //Updating device with session index 2’s query data to to team=blue. The event handler registered with live() above will automatically be applied to this device as well
-
 phame.device(2).setQueryData(“team”, “blue”);
 
-
-
 //Changing the team query data property to something other than blue, will automatically unregister the event handler registered with live() from the device
-
 phame.device(0).setQueryData(“team”: “green”); //The event handler is automatically removed from this device
-
-
+```
 
 Note that live() also works on deviceGroups that are generated using the and() and except() methods. That is:
 

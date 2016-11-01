@@ -35,9 +35,9 @@ TODO
 ## Device States
 Upon joining a Phame session a controller device can be in one of three states: ‘present', ‘away', or ‘gone’, each of which is explained below:
 
-present: Means that the device has joined the session and the the Phame app is currently in the foreground of the controller device and the screen is turned on.
-away: Means that the device has joined the session, but the the Phame app is currently not running in the foreground of the controller device or the screen is turned off. The device is however still considered to be part of the session as the Phame app may come to back to the foreground at any time.
-gone: The device has permanently been disconnected from the session, with no option of returning (The device can be connected to the session again, but at this point it would be considered a new controller device with a new session index).
+* `present` Means that the device has joined the session and the the Phame app is currently in the foreground of the controller device and the screen is turned on.
+* `away` Means that the device has joined the session, but the the Phame app is currently not running in the foreground of the controller device or the screen is turned off. The device is however still considered to be part of the session as the Phame app may come to back to the foreground at any time.
+* `gone` Means that the device has permanently been disconnected from the session, with no option of returning (The device can be connected to the session again, but at this point it would be considered a new controller device with a new session index).
 
 
 STATE MACHINE DIAGRAM HERE!

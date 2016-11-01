@@ -6,9 +6,9 @@
 
 
 
-## Main Device
+## Master
 
-The main device the device running the web application that initiates the phame session. This will typically be a device with a large screen (smart tv, laptop, desktop, tablet), but could be any device that runs a modern browser. Typically the most action of your game/application will take place on the main device’s screen. For every Phame session there is exactly one main device.
+The master is the device that runs the web application that initiates the phame session. This will typically be a device with a large screen (smart tv, laptop, desktop, tablet), but could be any device that runs a modern browser. Typically the most action of your game/application will take place on the main device’s screen. For every Phame session there is exactly one main device.
 
 
 

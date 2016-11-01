@@ -436,55 +436,35 @@ Registers an event handler for the given event name from the device, which will 
 Returns a string representation of the device (DESCRIBE WHAT IT LOOKS LIKE)
 
 
-
-
-
-
 #deviceGroup
 
-
-
-
-
 ##Iterating
-Note that for the most part you don't want to iterate. Just operate on the deviceGroup i self.
+Note that for the most part you don't want to iterate. Just operate on the `deviceGroup` i self.
 
 
 ###map(callback)
 
-The map() method creates an array with the result of calling the provided function on every device in this deviceGroup
+The `map()` method creates an array with the result of calling the provided function on every device in this `deviceGroup`.
 
-
-
-Example
-
-const deviceStates = phame.devices(‘all’).map(device => device.getState());
-
-
-
-
+```javascript
+const deviceStates = phame.devices('all').map(device => device.getState());
+```
 
 ###forEach(callback)
 
-The forEach method executes a provided function once per device in the deviceGroup
+The forEach method executes a provided function once per device in the `deviceGroup`.
 
-
-
-Example
-
-phame.devices(‘all’).forEach(device => device.vibrate(200)); //Note the same could be achieve by calling vibrate(200) on the deviceGroup itself, i.e. phame.devices(‘all’).vibrate(200)
-
-
+```javascript
+/* Note the following could be achieve by calling vibrate(200) 
+   on the deviceGroup itself, i.e. phame.devices('all').vibrate(200) */
+phame.devices('all').forEach(device => device.vibrate(200)); 
+```
 
 ###size()
-
-Returns the number of devices in the deviceGroup
-
-
+Returns the number of devices in the `deviceGroup`
 
 ###and(selector)
-
-Returns a new deviceGroup consisting of the devices in the current group plus the devices that match the given selector (link). Note that the current deviceGroup remains unaffected.
+Returns a new `deviceGroup` consisting of the devices in the current group plus the devices that match the given selector (link). Note that the current `deviceGroup` remains unaffected.
 
 ```javascript
 phame.devices(0).and(1).vibrate(1000);
@@ -492,100 +472,80 @@ phame.devices(0).and(1).vibrate(1000);
 
 
 ###except(selector)
-
-Returns a new deviceGroup consisting of the devices in the current group except the devices that match the given selector (link). Note that the current deviceGroup remains unaffected.
+Returns a new `deviceGroup` consisting of the devices in the current `deviceGroup` except the devices that match the given selector (link). Note that the current `deviceGroup` remains unaffected.
 
 ```javascript
 phame.devices('all').except(0).vibrate(1000);
 ```
 
+TODO: ADD ONE() HERE. IT IS MISSING, RIGHGT?
 
 ###solo(eventName, evenHandler)
-
-Registers an event handler for the given event name for every device in the device group. All the event handlers will all be removed as soon as the event is fired on one of the devices. In other works, the event handler will fire at most once (in total). Contrast this with one() where the event handler will fire at most once per device.
+Registers an event handler for the given `eventName` for every device in the `deviceGroup`. All the event handlers will all be removed as soon as the event is fired on one of the devices. In other words, the event handler will fire at most once (in total). Contrast this with `one()` where the event handler will fire at most once per device.
 
 
 
 ###live(eventName, eventHandler)
 
-Registers an event handler for all devices which match the current selector now and in the future. Furthermore, the event handler will be be automatically removed from a device, if the device seizes to match the current device at some point.
-
-
+Registers an event handler for all devices which match the current selector now and in the future. Furthermore, the event handler will be be automatically removed from a device, if the device ceases to match the current device at some point.
 
 ```javascript
-//This will register the event handler for all devices, including devices that will connect in the future
-phame.devices(‘all’).live(‘phame-touchstart’, (e) => console.log(’Touch start event fired for device with session index ‘ + e.device.sessionIndex));
+/* This will register the event handler for all devices, 
+   including devices that will connect in the future*/
+phame.devices('all').live('phame-touchstart', (e) => console.log('Touch start event fired for device with session index ' + e.device.sessionIndex));
 ```
 
 ```javascript
 //Assuming 3 devices are connected with session indices 0, 1, and 2:
-phame.device(0).setQueryData(“team”, “blue”);
-phame.device(1).setQueryData(“team”, “blue”);
-phame.device(2).setQueryData(“team”, “red”);
+phame.device(0).setQueryData('team', 'blue');
+phame.device(1).setQueryData('team', 'blue');
+phame.device(2).setQueryData('team', 'red');
 
 //This will register an event handler for devices with session indices 0 and 1
-phame.devices({“team”: “blue”}).live(“phame-touchstart”, () => console.log(’Touch start fired by blue team member’));
+phame.devices({'team': 'blue'}).live('phame-touchstart', () => console.log('Touch start fired by blue team member'));
 
 //Updating device with session index 2’s query data to to team=blue. The event handler registered with live() above will automatically be applied to this device as well
-phame.device(2).setQueryData(“team”, “blue”);
+phame.device(2).setQueryData('team', 'blue');
 
 //Changing the team query data property to something other than blue, will automatically unregister the event handler registered with live() from the device
-phame.device(0).setQueryData(“team”: “green”); //The event handler is automatically removed from this device
+phame.device(0).setQueryData('team': 'green'); //The event handler is automatically removed from this device
 ```
+Note that `live()` also works on `deviceGroups` that are generated using the `and()` and `except()` methods. That is:
 
-Note that live() also works on deviceGroups that are generated using the and() and except() methods. That is:
-
-
-
-phame.devices({team: ‘blue’}).and({team: ‘red’}).live(’some-event’, someHandler);
-
-
-
-…will register the handler for all devices with query data prop team set to either ‘blue’ or ‘red’ now and in the future. 
-
-
+```javascript
+phame.devices({team: 'blue'}).and({team: 'red'}).live('some-event', someHandler);
+```
+…will register the handler for all devices with the query data property 'team' set to either 'blue' or 'red' now and in the future. 
 
 ###die(eventName, eventHandler)
-
-Removes event handler previously attached using live(). Note that the current selector must match the selector used previously when applying live(). For example, the following line attaches a live handler to the deviceGroup consisting of devices with sessionIndices 0 and 1:
-
-```javascript
-phame.devices(0).and(1).live(“some-event”, () => console.log('Foo'))
-```
-
-Trying to remove this handler again, using a different selector (even if the deviceGroups consist of the same devices), will not have any effect:
+Removes event handler previously attached using `live()`. Note that the current selector must match the selector used previously when applying `live()`. For example, the following line attaches a live handler to the `deviceGroup` consisting of devices with `sessionIndices` 0 and 1:
 
 ```javascript
-phame.devices(1).and(0).die(“some-event”); //Will not remove the event handler! Selector is different!
+phame.devices(0).and(1).live('some-event', () => console.log('Foo'))
 ```
 
-
-The event handler can however be removed by using the exact same selector as when applying live():
+Trying to remove this handler again, using a different selector (even if the `deviceGroups` consist of the same devices), will not have any effect:
 
 ```javascript
-phame.devices(0).and(1).die(“some-event”); //TODO: FIGURE OUT IF HANDLER IS NEEDED?
+phame.devices(1).and(0).die('some-event'); //Will not remove the event handler! Selector is different!
 ```
+The event handler can however be removed by using the exact same selector as when applying `live()`:
 
-
-
-Also, when using a predicate function as (part of) the selector, a reference to the exact same function must be passed in when calling die, as was used when calling live() for it to work:
-
+```javascript
+phame.devices(0).and(1).die('some-event'); //TODO: FIGURE OUT IF HANDLER IS NEEDED?
+```
+Also, when using a predicate function as (part of) the selector, a reference to the exact same function must be passed in when calling die, as was used when calling `live()` for it to work:
 
 ```javascript
 //WRONG - won’t work.
-phame.devices((queryData, sessionIndex) => sessionIndex > 0).live(“some-event”, someHandler);
-phame.devices((queryData, sessionIndex) => sessionIndex > 0).die(“some-event”); //Selector is a different function (although function body is identical)
+phame.devices((queryData, sessionIndex) => sessionIndex > 0).live('some-event', someHandler);
+phame.devices((queryData, sessionIndex) => sessionIndex > 0).die('some-event'); //Selector is a different function (although function body is identical)
 
 //Right - will work
 const allButFirst = (queryData, sessionIndex) => sessionIndex > 2;
-phame.devices(allButFirst).live(“some-event”, someHandler);
-phame.devices(allButFirst).die(“some-event”); //Will remove the event handler, because selector is a reference to the same function as was used with live()
+phame.devices(allButFirst).live('some-event', someHandler);
+phame.devices(allButFirst).die('some-event'); //Will remove the event handler, because selector is a reference to the same function as was used with live()
 ```
-
-
-
-
-
 
 # Build In Events
 
@@ -669,16 +629,15 @@ builtin events
 
 #Selectors
 
-When you have only a single controller device, your main device will interact with it through the phame.device object. When dealing with multiple controller devices, however, you need a way to express which controller device(s) you wish to target when setting up event listener, sending instructions etc. Selectors offer you a powerful way to control this.
+When you have only a single controller device, your main device will interact with it through the `phame.device` object. When dealing with multiple controller devices, however, you need a way to express which controller device(s) you wish to target when setting up event listener, sending instructions etc. Selectors offer you a powerful way to control this.
 
 
 
-Selectors are passed to the phame.device() and phame.devices() methods, which will return you a device object and a deviceGroup object, respectively. The selectors can take one of the following forms:
+Selectors are passed to the `phame.device()` and `phame.devices()` methods, which will return you a device object and a `deviceGroup` object, respectively. The selectors can take one of the following forms:
 
 
 
 ##Integer
-
 If the selector is an integer it will match at most one device - the device whose session index (link) matches the selector. Since session indices uniquely identifies a controller device throughout a phame session, they often serve as convenient selectors.
 
 
@@ -696,28 +655,26 @@ phame.devices(0); //Returns the deviceGroup for the group consisting of only the
 Currently only a single string selector is supported; ‘all’ which matches all of the connected controller devices (both present and away link).
 
 ```javascript
-phame.device('all'); //Will return the first device that matches the selector. Since every device matches the ‘all selector’, first device - that is the one with the lowest session index - is returned
+/* Will return the first device that matches the selector. Since every
+device matches the ‘all selector’, first device - that is the one with 
+the lowest session index - is returned */
+phame.device('all');
 
-phame.devices('all'); //Will return a deviceGroup consisting of all the controller devices in the session
+/* Will return a deviceGroup consisting of all the controller devices in the session */
+phame.devices('all');
 ```
 
 
 ##Object (key/value pairs)
 
-Will be matched against the query data (link) attached to all devices. Each property from the given object is matched against the corresponding property from the devices’ query data objects (using ===). If they all match the device matches the selector. Note that if you need more advanced matching, such as matching nested properties or using < or > rather than ===, you can use a predicate function as explained below.
+Will be matched against the query data (link) attached to all devices. Each property from the given object is matched against the corresponding property from the devices’ `queryData` objects (using `===`). If they all match the device matches the selector. Note that if you need more advanced matching, such as matching nested properties or using `<` or `>` rather than `===`, you can use a predicate function as explained below.
 
-
-
-Examples (assuming 3 devices with session indices 0, 1, and 2 are connected):
-
-phame.device(0).setQueryData({team: ‘blue', rank: ‘captain'});
-
-phame.device(1).setQueryData({team: ‘red’, rank: ‘general’});
-
-phame.device(2).setQueryData({team: ‘blue’, rank: ‘general'});
-
-
-
+```javascript
+//assuming 3 devices with session indices 0, 1, and 2 are connected):
+phame.device(0).setQueryData({team: 'blue', rank: 'captain'});
+phame.device(1).setQueryData({team: 'red', rank: 'general'});
+phame.device(2).setQueryData({team: 'blue', rank: 'general'});
+```
 phame.devices({team: ‘blue’}); //Returns a deviceGroup with the devices with session indices 0 and 2 (both on the blue team)
 
 phame.devices({team: ‘blue’, rank: ‘general’}); //Returns a deviceGroup with the device with session index 2 (general on the blue team)

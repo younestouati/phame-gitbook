@@ -1,6 +1,7 @@
 {
     "plugins": [
-        "theme-rangle-io"
+        "theme-rangle-io",
+        "theme-rrf"
     ],
     "pluginsConfig": {}
 }

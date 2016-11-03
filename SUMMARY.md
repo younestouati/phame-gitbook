@@ -3,6 +3,7 @@
 
 ## APIs
   * [Master API](apis/Master API.md)
+  * [Methods](apis/Master API.md#Methods)
   * [Controller API](apis/Controller API.md)
   
 * [Introduction](README.md)

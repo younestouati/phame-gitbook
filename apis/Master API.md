@@ -6,7 +6,6 @@
 
 ## Methods
 
-
 ### Session Handling
 Before any controller device can connect, the main device must start a `phame session`. Each session has an associated sessionId, which is used when connecting a controller device. This section describes the methods `start()`, `startAndShowModal()`, `end()`, `restore()`, `isSessionActive()` and `getSessionId()` which is the complete set of methods dealing with session handling. 
 
@@ -143,7 +142,7 @@ if (phame.device(2)) {
 ```
 
 
-## Event subscription
+## <a name="event-subscription"></a>Event subscription
 
 Will trigger some event pertaining to the session // Don’t confuse with the on/off methods for the device and deviceGroup objects
 

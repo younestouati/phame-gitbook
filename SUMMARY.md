@@ -17,6 +17,9 @@
 ## Guides
 
 [Touch based Controllers](guides/Touch based Controllers)
-
+end()
+restore()
+isSessionActive()
+getSessionId()
 
 

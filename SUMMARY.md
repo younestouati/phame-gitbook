@@ -2,7 +2,9 @@
 
 
 ## Master API
-[Master API](apis/Master API.md)
+* [APIs](apis/README.md)
+    * [Master API](apis/master API.md)
+    * [Controller API](apis/Controller API.md)
 
 * [Introduction](README.md)
 * [Defining Methods](methods.md)

@@ -2,8 +2,8 @@
 
 ## APIs
 * [Master API](apis/Master API.md)
-  * [Session Handling](apis/Master API.md#session handling)
-  * [getSessionId()](apis/Master API.md#getSessionId)
+  * [phame.getSessionId()](apis/Master API.md#getSessionId)
+  * [device.getState()](apis/Master API.md#device.getState)
 ## Guides
 * [Touch based Controllers](guides/Touch based Controllers)
 

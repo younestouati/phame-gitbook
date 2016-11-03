@@ -1,6 +1,4 @@
 {
-    "plugins": [
-        "theme-rangle-io"
-    ],
+    "plugins": [],
     "pluginsConfig": {}
 }

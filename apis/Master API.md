@@ -9,7 +9,7 @@ Before any controller device can connect, the main device must start a `phame se
 
 Phame has built in support for restoring sessions (through the `start()` and `restore()` methods), which is particularly convinient during development, where you may wish to refresh your app frequently. The session restoration feature allows you to continue a session across page refreshes.
 
-### <a name="start()"></a>start(options) : promise
+### <a name="start"></a>start(options) : promise
 
 Starts a new phame session. Returns a `promise` that will resolve with the `sessionId` once the session has been created. Use the phame native apps or the [phame simulator](https://www.phame.io/simulator) to connect controller devices, using the `sessionId`.
 
@@ -22,7 +22,7 @@ If there is an ongoing session on the current domain, from a previous page load 
 
 
 //TODO: DOCUMENT THE OPTIONS!
-### <a name="startAndShowModal()"></a>startAndShowModal(options) : promise
+### <a name="startAndShowModal"></a>startAndShowModal(options) : promise
 
 Like the `start()` method `startAndShowModal()` starts a new phame session. It will also launch the phame connection modal UI once the session has been created. The UI explains to the user how to connect controller devices. The returned `promise` will resolve only when enough devices have connected (as defined by the the `minDevices` property of the options object, which defaults to 1).
 
@@ -33,7 +33,7 @@ phame.startAndShowModal()
 
 Like `start()` the `startAndShowModal()` method supports session restoration and thus provides auto reconnection.
 
-### <a name="end()"></a>end()
+### <a name="end"></a>end()
 
 Ends the current phame session. All connected controller devices will be disconnected.
 
@@ -41,7 +41,7 @@ Ends the current phame session. All connected controller devices will be disconn
 phame.end(); //The session has now ended.
 ```
 
-### <a name="restore()"></a>restore(options) : promise
+### <a name="restore"></a>restore(options) : promise
 
 Restores the ongoing session on the current domain, from a previous page load in the current browser tab, if any. In other words, if there is an ongoing session, this method works exactly like the `start()` method. If there is no ongoing session, this method does nothing. Returns a `promise` that will behave like the `start()` method's return `promise`, in case there is an ongoing session. If there is no ongoing session the `promise` will be rejected with `string` value `"no-session"`.
 
@@ -53,7 +53,7 @@ phame.restore()
 
 //TODO: Write something about how it is convenient to call it at all times, and definitely during development 
 
-### <a name="isSessionActive()"></a>isSessionActive() : boolean
+### <a name="isSessionActive"></a>isSessionActive() : boolean
 
 Returns whether or not a phame session is active. Note, that an ongoing session from a previous page load is not active until `start()` or `restore()` has been called.
 
@@ -66,7 +66,7 @@ if (isSessionActive()) {
 ```
 
 
-### <a name="getSessionId()"></a>getSessionId()
+### <a name="getSessionId"></a>getSessionId()
 
 If there is an active session this method returns the `sessionId` (which is used to connect controller devices to the session). If there is no active session, `null` is returned.
 

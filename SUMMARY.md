@@ -4,16 +4,9 @@
 ## APIs
   * [Master API](apis/Master API.md)
     * [Session Handling](apis/Master API.md#session handling)
-      * [start()](apis/Master API.md#start())
-      * [startAndShowModal()](apis/Master API.md#startAndShowModal())
+      * [start()](apis/Master API.md#start()
+      * [startAndShowModal()](apis/Master API.md#startAndShowModal()
     * [Event Subscription](apis/Master API.md#event-subscription)
-    *
-start()
-startAndShowModal()
-end()
-restore()
-isSessionActive()
-getSessionId()
   * [Controller API](apis/Controller API.md)
   
 * [Introduction](README.md)

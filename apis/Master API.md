@@ -77,7 +77,7 @@ console.log("The id of the current session is: ", phame.getSessionId());
 
 
 
-## Device Handling
+## <a name="device-handling"></a>Device Handling
 
 NOGET. This section describes the properties and methods you will use to interact with the connected controller devices. It will introduce the `device` property, used to target the `primary device`, as well as the `device()` and `devices()` methods used to target a single or a group of controller devices based on a given `selector`. Finally, the `setPrimaryDevice` method is presented.
 
@@ -87,13 +87,13 @@ NOGET. This section describes the properties and methods you will use to interac
 
 
 
-### device
+### <a name="device-prop"></a>device
 
 A reference to the `primary device`. Allows you to interact with the `primary device` conveniently by `phame.device.on()`, `phame.device.off()` etc. Particularly convenient when there is only a single controller device connected. When multiple controllers devices are connected, you can still access the primary device this way, or you can chose to ignore the primary device concept all together and use other means (i.e. the `.device()` and `devices()` methods) to target the controller devices you wish to target. When multiple devices are connected, the primary device will be the controller device that joined the session first, unless you have explicitly set another as primary device using the `setPrimaryDevice()` method.
 
 
 
-### device(selector) : device
+### <a name="device"></a>device(selector) : device
 
 Returns the first of the controller devices that match the given `selector` (See XXX for an explanation of what a selector is). The devices are sorted by the time at which they joined the session, meaning that if multiple devices match the selector, the one that joined the session first will be returned.  
 
@@ -107,7 +107,7 @@ if (deviceWithSessionIndex3 === null) {
 ```
 
 
-### devices(selector) : deviceGroup
+### <a name="devices"></a>devices(selector) : deviceGroup
 
 Returns the `deviceGroup` consisting of all the controller devices that match the given selector (see XXX for an explanation of what a selector is). Also link to documentation for deviceGroup
 
@@ -116,7 +116,7 @@ console.log("Total number of controller devices: ", phame.devices("all").size())
 ```
 
 
-### setPrimaryDevice(device)
+### <a name="setPrimaryDevice"></a>setPrimaryDevice(device)
 
 Sets the given device as the primary device. This means that the device can be accessed directly using the `phame.device` property: e.g. `phame.device.on(…)`. LINK
 
@@ -136,7 +136,7 @@ Will trigger some event pertaining to the session // Don’t confuse with the on
 
 
 
-### on(eventName, eventHandler)
+### <a name="on"></a>on(eventName, eventHandler)
 
 Registers an event handler for the given event name from the `phame` object. The `phame` object triggers the following events:
 
@@ -169,8 +169,7 @@ function connectionHandler(device) {
 phame.on('phame-device-connected', connectionHandler);	
 ```
 
-
-### off(eventName, eventHandler)
+### <a name="off"></a>off(eventName, eventHandler)
 
 Unregisters the given event handler for the given event name. Note, that the given event handler must be a reference to the same function that was passed to the `.on()` method when registering the handler.
 
@@ -178,21 +177,15 @@ Unregisters the given event handler for the given event name. Note, that the giv
 phame.off('phame-device-connected', connectionHandler);	
 ```
 
-
-
-###version (readonly)
+###<a name="version"></a>version (readonly)
 
 ```javascript
 console.log('Currently running version ', + phame.version + ' of phame.js');
-
 ```
-
 
 Read only property holding the library version number
 
-
-
-# device 
+# <a name="device-object"></a>device 
 
 The `device` object represents a single controller device. Use this object to listen for events from this controller device or to send instructions/queries to it through remote procedure calls (link to guide). If you wish to interact with more than one device at a time, see the documentation for `deviceGroup` (link)
 

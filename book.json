@@ -1,5 +1,8 @@
 {
-    "plugins": [ "theme-api" ],
+    "plugins": [
+        "theme-api",
+        "theme-rangle-io"
+    ],
     "pluginsConfig": {
         "theme-api": {
             "languages": [

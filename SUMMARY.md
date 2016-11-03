@@ -6,6 +6,7 @@
     * [Session Handling](apis/Master API.md#session handling)
       * [start()](apis/Master API.md#start())
       * [startAndShowModal()](apis/Master API.md#startAndShowModal())
+      * [end()](apis/Master API.md#end())
     * [Event Subscription](apis/Master API.md#event-subscription)
   * [Controller API](apis/Controller API.md)
   

@@ -1,5 +1,9 @@
 # Summary
 
+
+## Master API
+[Master API](apis/Master API.md)
+
 * [Introduction](README.md)
 * [Defining Methods](methods.md)
 * [phame.js](phamejs.md)

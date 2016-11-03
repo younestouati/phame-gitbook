@@ -4,7 +4,7 @@
 ## APIs
   * [Master API](apis/Master API.md)
   * [Methods](apis/Master API.md#Methods)
-  ** [Session Handling](apis/Master API.md#Session Handling)
+    * [Session Handling](apis/Master API.md#Session Handling)
   * [Controller API](apis/Controller API.md)
   
 * [Introduction](README.md)

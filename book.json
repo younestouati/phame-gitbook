@@ -1,10 +1,10 @@
 {
     "plugins": [
-        "theme-api",
+        "-theme-api",
         "theme-rangle-io"
     ],
     "pluginsConfig": {
-        "theme-api": {
+        "-theme-api": {
             "languages": [
                 {
                     "lang": "js",

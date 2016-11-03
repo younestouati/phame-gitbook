@@ -2,19 +2,14 @@
 
 `phame` is a global namespace from which the phame api methods and properties are accessed.
 
-
-
 ## Methods
 
-### Session Handling
+### <a name="session-handling"></a>Session Handling
 Before any controller device can connect, the main device must start a `phame session`. Each session has an associated sessionId, which is used when connecting a controller device. This section describes the methods `start()`, `startAndShowModal()`, `end()`, `restore()`, `isSessionActive()` and `getSessionId()` which is the complete set of methods dealing with session handling. 
 
 Phame has built in support for restoring sessions (through the `start()` and `restore()` methods), which is particularly convinient during development, where you may wish to refresh your app frequently. The session restoration feature allows you to continue a session across page refreshes.
 
-
-
-
-### start(options) : promise
+### <a name="start()"></a>start(options) : promise
 
 Starts a new phame session. Returns a `promise` that will resolve with the `sessionId` once the session has been created. Use the phame native apps or the [phame simulator](https://www.phame.io/simulator) to connect controller devices, using the `sessionId`.
 
@@ -27,8 +22,7 @@ If there is an ongoing session on the current domain, from a previous page load 
 
 
 //TODO: DOCUMENT THE OPTIONS!
-
-### startAndShowModal(options) : promise
+### <a name="startAndShowModal()"></a>startAndShowModal(options) : promise
 
 Like the `start()` method `startAndShowModal()` starts a new phame session. It will also launch the phame connection modal UI once the session has been created. The UI explains to the user how to connect controller devices. The returned `promise` will resolve only when enough devices have connected (as defined by the the `minDevices` property of the options object, which defaults to 1).
 
@@ -37,12 +31,9 @@ phame.startAndShowModal()
   .then(() => console.log("Phame Session started, and a controller device has joined. We are ready to roll!"));
 ```
 
-
 Like `start()` the `startAndShowModal()` method supports session restoration and thus provides auto reconnection.
 
-
-
-### end()
+### <a name="end()"></a>end()
 
 Ends the current phame session. All connected controller devices will be disconnected.
 
@@ -50,8 +41,7 @@ Ends the current phame session. All connected controller devices will be disconn
 phame.end(); //The session has now ended.
 ```
 
-
-### restore(options) : promise
+### <a name="restore()"></a>restore(options) : promise
 
 Restores the ongoing session on the current domain, from a previous page load in the current browser tab, if any. In other words, if there is an ongoing session, this method works exactly like the `start()` method. If there is no ongoing session, this method does nothing. Returns a `promise` that will behave like the `start()` method's return `promise`, in case there is an ongoing session. If there is no ongoing session the `promise` will be rejected with `string` value `"no-session"`.
 
@@ -63,9 +53,7 @@ phame.restore()
 
 //TODO: Write something about how it is convenient to call it at all times, and definitely during development 
 
-
-
-### isSessionActive() : boolean
+### <a name="isSessionActive()"></a>isSessionActive() : boolean
 
 Returns whether or not a phame session is active. Note, that an ongoing session from a previous page load is not active until `start()` or `restore()` has been called.
 
@@ -78,7 +66,7 @@ if (isSessionActive()) {
 ```
 
 
-### getSessionId()
+### <a name="getSessionId()"></a>getSessionId()
 
 If there is an active session this method returns the `sessionId` (which is used to connect controller devices to the session). If there is no active session, `null` is returned.
 
@@ -338,14 +326,9 @@ phame.device.removeQueryData(); // Query data is now {}
 ```
 
 
-
-
-
-
 ## Remote Procedure Calls
 
 // Method calls that run on the controller device // Abstracted as remote procedure calls with possible return values (as promises)
-
 
 
 ### setController(controllerName) : promise
@@ -361,9 +344,6 @@ TALK ABOUT HOW THIS IS THE RECOMMENDED WAY OF TRANSFERING STATE. LINK TO ARTICLE
 ```javascript
 phame.device.setProps({counterValue: 3});
 ```
-
-
-
 
 ### ping() : promise
 
@@ -468,7 +448,6 @@ Returns a new `deviceGroup` consisting of the devices in the current group plus 
 ```javascript
 phame.devices(0).and(1).vibrate(1000);
 ```
-
 
 ###except(selector)
 Returns a new `deviceGroup` consisting of the devices in the current `deviceGroup` except the devices that match the given selector (link). Note that the current `deviceGroup` remains unaffected.
@@ -612,41 +591,26 @@ phame.devices(allButFirst).die('some-event'); //Will remove the event handler, b
 
 
 
-
-
-
-
 Events
 
 The event object
 builtin events
 
 
-
-
-
-
 #Selectors
 
 When you have only a single controller device, your main device will interact with it through the `phame.device` object. When dealing with multiple controller devices, however, you need a way to express which controller device(s) you wish to target when setting up event listener, sending instructions etc. Selectors offer you a powerful way to control this.
 
-
-
 Selectors are passed to the `phame.device()` and `phame.devices()` methods, which will return you a device object and a `deviceGroup` object, respectively. The selectors can take one of the following forms:
-
 
 
 ##Integer
 If the selector is an integer it will match at most one device - the device whose session index (link) matches the selector. Since session indices uniquely identifies a controller device throughout a phame session, they often serve as convenient selectors.
 
-
-
-Example:
-
+```javascript
 phame.device(0); //Return the device with session index 0 (if it exists), or null
-
 phame.devices(0); //Returns the deviceGroup for the group consisting of only the device with session index 0 (if it exists) or an empty deviceGroup
-
+```
 
 
 ##String
@@ -678,10 +642,7 @@ phame.devices({team: ‘blue’}); //Returns a deviceGroup with the devices with
 phame.devices({team: ‘blue’, rank: ‘general’}); //Returns a deviceGroup with the device with session index 2 (general on the blue team)
 ```
 
-
-
 ##Predicate Function
-
 Predicate function selectors allow you create implement custom selector logic. The function will be passed the query data and session index for each device and must return a boolean indicating whether or not the device matches the selector.
 
 

@@ -2,7 +2,7 @@
 
 
 ## APIs
-  * [Master API](apis/master API.md)
+  * [Master API](apis/Master API.md)
   * [Controller API](apis/Controller API.md)
   
 * [Introduction](README.md)
